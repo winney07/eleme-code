@@ -14,7 +14,7 @@
           <li v-for="item in goods" class="food-list food-list-hook">
             <h1 class="title">{{item.name}}</h1>
             <ul>
-              <li v-for="food in item.foods" class="food-item border-1px" @click="selectFood(food,$event)">
+              <li v-for="food in item.foods" class="food-item border-1px">
                 <div class="icon">
                   <img :src="food.icon" width="57" height="57">
                 </div>
@@ -29,6 +29,9 @@
                     <span class="now">￥{{food.price}}</span>
                     <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
+                  <div class="cartcontrol-wrapper">
+                    <cartcontrol :food="food" v-on:cart-add="cartAdd"></cartcontrol>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -36,7 +39,7 @@
         </ul>
       </div>
       <food :food="selectedFood" ref="food"></food>
-      <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+      <shopcart ref="shopcart" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" :select-foods="selectFoods"></shopcart>
   </div>
 </template>
 
@@ -44,6 +47,8 @@
 import food from '../food/food'
 import shopcart from '../shopcart/shopcart'
 import BScroll from 'better-scroll'
+import cartcontrol from '../cartcontrol/cartcontrol'
+
 const ERR_OK = 0;
 export default {
   name: '',
@@ -54,7 +59,7 @@ export default {
     }
   },
   components: {
-    food,shopcart
+    food,shopcart,cartcontrol
   },
   data() { 
     return {
@@ -74,7 +79,19 @@ export default {
         }
       }
       return 0;
-    }
+    },
+    //加上这个，让shopcart组件跟cartcontrol组件连接在一起
+    selectFoods() {
+      let foods = [];
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food);
+          }
+        });
+      });
+      return foods;
+    },
   },
   created() {
     this.classMap = ['decrease','discount','guarantee','invoice','special'],
@@ -90,11 +107,23 @@ export default {
     })
   },
   methods: {
+    cartAdd(el){
+      this.$nextTick(() => {
+        this.$refs['shopcart'].drop(el);
+      });
+    },
+    _drop(target) {
+      // 体验优化,异步执行下落动画
+        this.$nextTick(() => {
+          this.$refs.shopcart.drop(target);
+        });
+    },
     _initScroll() {
       this.menuScroll = new BScroll(this.$refs.menuWrapper,{
         click:true
       });
       this.foodsScroll = new BScroll(this.$refs.foodsWrapper,{
+        click:true,
         probeType: 3
       });
 
@@ -127,7 +156,13 @@ export default {
       let el = foodList[index];
       this.foodsScroll.scrollToElement(el, 300);
     }
-  }
+  },
+  // events: {
+  //   //点击的时候，拿到组件的元素
+  //   'cart.add'(target) {
+  //     this._drop(target);
+  //   }
+  // }
   
  }
 </script>

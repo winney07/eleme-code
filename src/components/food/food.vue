@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style>
-.food{
+/* .food{
     position: fixed;
     left: 0;
     top: 0;
@@ -34,5 +34,5 @@ export default {
     z-index: 30;
     width: 100%;
     background: #fff;
-}
+} */
 </style>
