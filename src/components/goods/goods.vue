@@ -14,7 +14,7 @@
           <li v-for="item in goods" class="food-list food-list-hook">
             <h1 class="title">{{item.name}}</h1>
             <ul>
-              <li v-for="food in item.foods" class="food-item border-1px">
+              <li v-for="food in item.foods" class="food-item border-1px" @click="selectFood(food,$event)">
                 <div class="icon">
                   <img :src="food.icon" width="57" height="57">
                 </div>
@@ -44,12 +44,13 @@
 </template>
 
 <script type="text/esmascript-6">
-import food from '../food/food'
-import shopcart from '../shopcart/shopcart'
 import BScroll from 'better-scroll'
+import shopcart from '../shopcart/shopcart'
 import cartcontrol from '../cartcontrol/cartcontrol'
+import food from '../food/food'
 
 const ERR_OK = 0;
+
 export default {
   name: '',
   // 要返回过去的数据seller
@@ -142,9 +143,9 @@ export default {
       }
     },
     selectFood(food, event) {
-      /* if (!event._constructed) {
+      if (!event._constructed) {
         return;
-      } */
+      }
       this.selectedFood = food;
       this.$refs.food.show();
     },
@@ -309,5 +310,15 @@ export default {
   position: absolute;
   right: 0;
   bottom: 12px;
+}
+.bulletin{
+  width: 80%;
+  margin: 0 auto;
+}
+.bulletin .content{
+  font-size: 12px;
+  line-height: 1.8;
+  text-indent: 2em;
+  text-align: justify;
 }
 </style>

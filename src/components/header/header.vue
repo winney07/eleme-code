@@ -230,7 +230,7 @@ export default {
       z-index: -1
       filter: blur(10px)
    }
- .detail{
+ .header .detail{
       position: fixed
       z-index: 100
       top: 0
@@ -243,18 +243,18 @@ export default {
       opacity 1
       background rgba(7,17,27,0.8)
    }
-   .detail.fade-enter-active,.detail.fade-leave-active {
+  .header .detail.fade-enter-active, .header .detail.fade-leave-active {
       transition all 0.5s
    }
-  .detail.fade-enter,.detail.fade-leave-to {
+   .header .detail.fade-enter, .header .detail.fade-leave-to {
     opacity 0
     background rgba(7,17,27,0)
   }
-   .detail-wrapper{
+  .header .detail-wrapper{
       width: 100%
       min-height: 100%
    }
-   .detail-wrapper .detail-main{
+  .header .detail-wrapper .detail-main{
       margin-top: 64px
       padding-bottom: 64px
    }
@@ -325,11 +325,11 @@ export default {
     line-height: 16px
     font-size: 12px
   }
-  .bulletin{
+  .haeder .bulletin{
     width: 80%
     margin: 0 auto
   }
-  .bulletin .content{
+  .haeder .bulletin .content{
     padding: 0 12px
     line-height: 24px
     font-size: 12px

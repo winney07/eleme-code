@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="shopcart">
       <div class="content" @click="toggleList">
           <div class="content-left">
@@ -11,7 +12,7 @@
                 <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}元</div>
                 <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
           </div>
-          <div class="content-right">
+          <div class="content-right" @click.stop.prevent="pay">
               <div class="pay" :class="payClass">
                   {{payDesc}}
               </div>
@@ -28,7 +29,7 @@
         <div class="shopcart-list" v-show="listShow" :class="{'show':listShow === true}">
             <div class="list-header">
                 <h1 class="title">购物车</h1>
-                <span class="empty">清空</span>
+                <span class="empty" @click="empty">清空</span>
             </div>
             <div class="list-content" ref="listContent">
                 <ul>
@@ -46,6 +47,10 @@
         </div>
       <!-- </transition-group> -->
   </div>
+  <!-- <transition name="fade"> -->
+    <div class="list-mask" v-show="listShow" @click="hideList"></div>
+  <!-- </transition> -->
+</div>
 </template>
 
 <script type="text/esmascript-6">
@@ -161,7 +166,22 @@ export default {
               return;
           }
           this.fold = !this.fold;
-      }  
+      },
+      hideList() {
+        this.fold = true;
+      },
+      empty(){
+          this.selectFoods.forEach((food) => {
+              food.count = 0;
+          });
+      },
+      pay() {
+          if(this.totalPrice < this.minPrice) {
+              return;
+          }else{
+              alert(`支付${this.totalPrice}元`);
+          }
+      }
   }
  }
 </script>
@@ -349,5 +369,25 @@ export default {
     position: absolute;
     right: 0;
     bottom: 6px;
+}
+.list-mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 40;
+    backdrop-filter: blur(10px);
+    background: rgba(7, 17, 27, 0.6);
+}
+
+.fade-enter-active,.fade-leave-active{
+    transition: all 0.5s;
+    opacity: 1;
+    background: rgba(7, 17, 27, 0.6);
+}
+.fade-enter, .fade-leave-to{
+    opacity: 0;
+    background: rgba(7, 17, 27, 0);
 }
 </style>
